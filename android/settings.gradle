@@ -1,0 +1,3 @@
+rootProject.name = 'MiteshProj1'
+
+include ':app'
