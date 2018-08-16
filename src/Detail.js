@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { View,Text,ImageBackground,Dimensions,StyleSheet } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import PureChart from 'react-native-pure-chart';
+import { AreaChart, Grid, XAxis, YAxis } from 'react-native-svg-charts'
+import { Circle, Path } from 'react-native-svg'
 
 const { width, height } = Dimensions.get('window');
 
@@ -27,6 +29,30 @@ class Detail extends Component {
             {x: '3', y: 42},
             {x: '4', y: 92},
         ]
+        const data = [ 0, 25, 42, 95 ]
+
+        const Decorator = ({ x, y, data }) => {
+            return data.map((value, index) => (
+                <Circle
+                    key={ index }
+                    cx={ x(index) }
+                    cy={ y(value) }
+                    r={ 4 }
+                    stroke={ 'white' }
+                    fill={ 'rgb(134, 178, 197)' }
+                />
+            ))
+        }
+
+        const Line = ({ line }) => (
+            <Path
+                d={ line }
+                stroke={ 'rgb(134, 178, 197)' }
+                fill={ 'none' }
+            />
+        )
+
+
         return (
             <ImageBackground
                 style={{width:width,height:height}}
@@ -42,7 +68,23 @@ class Detail extends Component {
                         <View style={{backgroundColor:'#202122',width:width-28,height:1}}>
                         </View>
                         <View style={{flex:1,justifyContent:'center',marginLeft:8, marginRight:8}}>
-                            <PureChart data={sampleData} type='line' style={{background:'rgba(0,0,0,0)'}} />
+                            <AreaChart
+                                style={{ height: 100 }}
+                                data={ data }
+                                svg={{ fill: 'rgba(134, 178, 197, 0.2)' }}
+                            >
+                                <Grid/>
+                                <Line/>
+                                <Decorator/>
+                            </AreaChart>
+                            <XAxis
+                                style={{ marginHorizontal: -10 }}
+                                data={ data }
+                                formatLabel={ (value, index) => index }
+                                contentInset={{ left: 10, right: 10 }}
+                                svg={{ fontSize: 10, fill: '#F9C947' }}
+                            />
+                            
                         </View>
                     </View>
                     <View style={{backgroundColor:'#434445',width:width-28,height:270,marginTop:15,borderRadius:3}}>
